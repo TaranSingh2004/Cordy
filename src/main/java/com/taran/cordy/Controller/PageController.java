@@ -1,12 +1,17 @@
 package com.taran.cordy.Controller;
 
 import com.taran.cordy.forms.UserForm;
+import com.taran.cordy.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class PageController {
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/home")
     public String home(Model m){
