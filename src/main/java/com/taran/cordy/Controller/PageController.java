@@ -6,9 +6,11 @@ import com.taran.cordy.helpers.Message;
 import com.taran.cordy.helpers.MessageType;
 import com.taran.cordy.services.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -55,7 +57,7 @@ public class PageController {
     }
 
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session){
+    public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult rBindingResult, HttpSession session){
 //        userService
 //        User user = User.builder()
 //                .name(userForm.getName())
@@ -65,6 +67,9 @@ public class PageController {
 //                .phoneNumber(userForm.getPhoneNumber())
 //                .profilePic("./resources/static/img/default.jpg")
 //                .build();
+        if(rBindingResult.hasErrors()){
+            return "register";
+        }
 
         User user = new User();
         user.setName(userForm.getName());
