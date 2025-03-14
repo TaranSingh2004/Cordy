@@ -1,7 +1,11 @@
 package com.taran.cordy.Controller;
 
+import com.taran.cordy.entities.User;
 import com.taran.cordy.forms.UserForm;
+import com.taran.cordy.helpers.Message;
+import com.taran.cordy.helpers.MessageType;
 import com.taran.cordy.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,13 +50,35 @@ public class PageController {
     public String register(Model model){
         UserForm userForm = new UserForm();
         model.addAttribute("userForm", userForm);
-        userForm.setName("Taran");
+//        userForm.setName("Taran");
         return "register";
     }
 
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm){
+    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session){
 //        userService
+//        User user = User.builder()
+//                .name(userForm.getName())
+//                .email(userForm.getEmail())
+//                .password(userForm.getPassword())
+//                .about(userForm.getAbout())
+//                .phoneNumber(userForm.getPhoneNumber())
+//                .profilePic("./resources/static/img/default.jpg")
+//                .build();
+
+        User user = new User();
+        user.setName(userForm.getName());
+        user.setEmail(userForm.getEmail());
+        user.setPassword(userForm.getPassword());
+        user.setPhoneNumber(userForm.getPhoneNumber());
+        user.setAbout(userForm.getAbout());
+        user.setProfilePic("./resources/static/img/default.jpg");
+
+        User savedUser = userService.saveUser(user);
+
+        Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
+        session.setAttribute("message", message);
+
         return "redirect:/register";
     }
 
